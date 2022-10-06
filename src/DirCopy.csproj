@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RepositoryUrl>https://github.com/zwcloud/Cli.DirCopy</RepositoryUrl>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://zwcloud.net/#project/cli</PackageProjectUrl>
+    
+    <Copyright>Copyright (c) 2022 Zou Wei</Copyright>
+    <Version>1.0.0.0</Version>
+    <AssemblyTitle>DirCopy</AssemblyTitle>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+  </ItemGroup>
+</Project>
