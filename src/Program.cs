@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CommandLine;
 using CommandLine.Text;
 
@@ -13,14 +14,15 @@ public class Options
     public string DestDir { get; set; }
 
     [Option('i', "Ignore", Required = false)]
-    public string IgnoreDir { get; set; }
+    public IEnumerable<string>  IgnoreDirs { get; set; }
 }
 
-class Program
+public class Program
 {
-    private static void DirectoryCopy(string sourceDirName, string destDirName, string ignoredDirPath)
+    private static void DirectoryCopy(string sourceDirName, string destDirName,
+        IList<string> ignoredDirPaths)
     {
-        if (sourceDirName == ignoredDirPath)
+        if (ignoredDirPaths.Contains(sourceDirName))
         {
             return;
         }
@@ -53,7 +55,7 @@ class Program
         foreach (DirectoryInfo subdir in dirs)
         {
             string temppath = Path.Combine(destDirName, subdir.Name);
-            DirectoryCopy(subdir.FullName, temppath, ignoredDirPath);
+            DirectoryCopy(subdir.FullName, temppath, ignoredDirPaths);
         }
         
     }
@@ -67,7 +69,9 @@ class Program
                 //TrimEnding '/' and '\' because DirectoryInfo.FullName never ends with '/' and '\'.
                 var srcDir = Path.GetFullPath(o.SrcDir).TrimEnd('/', '\\');
                 var destDir = Path.GetFullPath(o.DestDir).TrimEnd('/', '\\');
-                var ignoreDir = Path.GetFullPath(o.IgnoreDir).TrimEnd('/', '\\');
+                var ignoreDirList = o.IgnoreDirs
+                    .Select(ignoreDir => Path.GetFullPath(ignoreDir).TrimEnd('/', '\\'))
+                    .ToList();
 
                 Console.WriteLine($@"Copying
 from
@@ -75,8 +79,8 @@ from
 to
     {destDir}
 and ignore
-    {ignoreDir}");
-                DirectoryCopy(srcDir, destDir, ignoreDir);
+    {string.Join("\n\t", ignoreDirList)}");
+                DirectoryCopy(srcDir, destDir, ignoreDirList);
 
                 Console.WriteLine("Copying finished.");
             })
