@@ -14,7 +14,7 @@ public class Options
     public string DestDir { get; set; }
 
     [Option('i', "Ignore", Required = false)]
-    public IEnumerable<string>  IgnoreDirs { get; set; }
+    public IEnumerable<string> IgnoreDirs { get; set; }
 }
 
 public class Program
@@ -75,11 +75,11 @@ public class Program
 
                 Console.WriteLine($@"Copying
 from
-    {srcDir}
+	{srcDir}
 to
-    {destDir}
+	{destDir}
 and ignore
-    {string.Join("\n\t", ignoreDirList)}");
+	{string.Join("\n\t", ignoreDirList)}");
                 DirectoryCopy(srcDir, destDir, ignoreDirList);
 
                 Console.WriteLine("Copying finished.");

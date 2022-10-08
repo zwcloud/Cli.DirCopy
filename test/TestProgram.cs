@@ -136,5 +136,13 @@ namespace DirCopy.Test
             
             Directory.Delete(temp, true);
         }
+
+        [TestMethod]
+        public void TestNormalizeDirectoryPath()
+        {
+            var str = @"D:\dir0\dir1\dir2\dir3\dir4\..\..\dir5\dir6\dir7\";
+            var normalizedPath = Path.GetFullPath(str).TrimEnd('/', '\\');
+            Assert.AreEqual(@"D:\dir0\dir1\dir2\dir5\dir6\dir7", normalizedPath);
+        }
     }
 }
