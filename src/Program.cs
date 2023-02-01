@@ -19,47 +19,6 @@ public class Options
 
 public class Program
 {
-    private static void DirectoryCopy(string sourceDirName, string destDirName,
-        IList<string> ignoredDirPaths)
-    {
-        if (ignoredDirPaths.Contains(sourceDirName))
-        {
-            return;
-        }
-
-        // Get the subdirectories for the specified directory.
-        DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-        if (!dir.Exists)
-        {
-            throw new DirectoryNotFoundException(
-                "Source directory does not exist or could not be found: "
-                + sourceDirName);
-        }
-
-        DirectoryInfo[] dirs = dir.GetDirectories();
-        // If the destination directory doesn't exist, create it.
-        if (!Directory.Exists(destDirName))
-        {
-            Directory.CreateDirectory(destDirName);
-        }
-
-        // Get the files in the directory and copy them to the new location.
-        FileInfo[] files = dir.GetFiles();
-        foreach (FileInfo file in files)
-        {
-            string temppath = Path.Combine(destDirName, file.Name);
-            file.CopyTo(temppath, true);
-        }
-
-        // Copy subdirectories and their contents to new location.
-        foreach (DirectoryInfo subdir in dirs)
-        {
-            string temppath = Path.Combine(destDirName, subdir.Name);
-            DirectoryCopy(subdir.FullName, temppath, ignoredDirPaths);
-        }
-        
-    }
-
     public static void Main(string[] args)
     {
         var parser = new Parser(with => with.HelpWriter = null);
@@ -80,7 +39,7 @@ to
 	{destDir}
 and ignore
 	{string.Join("\n\t", ignoreDirList)}");
-                DirectoryCopy(srcDir, destDir, ignoreDirList);
+                DirCopy.DirectoryCopy(srcDir, destDir, ignoreDirList);
 
                 Console.WriteLine("Copying finished.");
             })
